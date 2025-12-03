@@ -52,8 +52,52 @@ defmodule AOC.Day02 do
     sum
   end
 
+  # This is slow try to improve perf later
   def part2() do
+    ranges = parse_input("input.txt")
+    parsed_ranges = ranges |> Enum.map(fn range -> parse_range(range) end)
+
+    invalid_ids =
+      parsed_ranges
+      |> Enum.reduce([], fn range, acc ->
+        [st, ed] = range
+        range_list = Enum.to_list(st..ed)
+
+        invalid_ids =
+          range_list
+          |> Enum.filter(fn number ->
+            integer_string = Integer.to_string(number)
+            string_length = integer_string |> String.length()
+
+            match =
+              if string_length === 1 do
+                false
+              else
+                Enum.find(Enum.to_list(1..div(string_length, 2)), fn x ->
+                  {substr, str} = String.split_at(integer_string, x)
+                  replacement = String.replace(str, substr, "")
+
+                  if replacement == "" do
+                    true
+                  else
+                    false
+                  end
+                end)
+              end
+
+            match
+          end)
+
+        acc = acc ++ invalid_ids
+        acc
+      end)
+
+    sum = Enum.sum(invalid_ids)
+    IO.inspect("Result: #{sum}")
+
+    sum
   end
 end
 
 AOC.Day02.part1()
+AOC.Day02.part2()
