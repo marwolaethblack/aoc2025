@@ -2,7 +2,7 @@ defmodule AOC.Day02 do
   require Integer
 
   def parse_input(filename) do
-    case File.read(filename) do
+    case File.cwd!() |> Path.join(filename) |> File.read() do
       {:ok, contents} ->
         String.trim(contents) |> String.split(",")
 
@@ -16,7 +16,7 @@ defmodule AOC.Day02 do
   end
 
   def part1() do
-    ranges = parse_input("input.txt")
+    ranges = parse_input("lib/day02/input.txt")
     parsed_ranges = ranges |> Enum.map(fn range -> parse_range(range) end)
 
     invalid_ids =
@@ -54,7 +54,7 @@ defmodule AOC.Day02 do
 
   # This is slow try to improve perf later
   def part2() do
-    ranges = parse_input("input.txt")
+    ranges = parse_input("lib/day02/input.txt")
     parsed_ranges = ranges |> Enum.map(fn range -> parse_range(range) end)
 
     invalid_ids =
@@ -98,6 +98,3 @@ defmodule AOC.Day02 do
     sum
   end
 end
-
-AOC.Day02.part1()
-AOC.Day02.part2()

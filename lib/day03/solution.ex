@@ -2,7 +2,7 @@ defmodule AOC.Day03 do
   require Integer
 
   def parse_input(filename) do
-    case File.read(filename) do
+    case File.cwd!() |> Path.join(filename) |> File.read() do
       {:ok, contents} ->
         String.trim(contents) |> String.split("\n")
 
@@ -26,7 +26,7 @@ defmodule AOC.Day03 do
   end
 
   def part1() do
-    input = parse_input("input.txt") |> parse_numbers
+    input = parse_input("lib/day03/input.txt") |> parse_numbers
 
     max_joltages =
       Enum.reduce(input, 0, fn battery_array, acc ->
@@ -54,7 +54,7 @@ defmodule AOC.Day03 do
   end
 
   def part2() do
-    input = parse_input("input.txt") |> parse_numbers
+    input = parse_input("lib/day03/input.txt") |> parse_numbers
 
     max_joltages =
       Enum.reduce(input, 0, fn battery_array, acc ->
@@ -86,6 +86,3 @@ defmodule AOC.Day03 do
     max_joltages
   end
 end
-
-AOC.Day03.part1()
-AOC.Day03.part2()

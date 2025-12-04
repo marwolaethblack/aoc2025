@@ -1,6 +1,6 @@
 defmodule AOC.Day01 do
   def parse_input(filename) do
-    case File.read(filename) do
+    case File.cwd!() |> Path.join(filename) |> File.read() do
       {:ok, contents} ->
         String.split(contents, "\n")
 
@@ -21,7 +21,7 @@ defmodule AOC.Day01 do
     min_dial = 0
     max_dial = 99
 
-    split_parts = parse_input("input.txt")
+    split_parts = parse_input("lib/day01/input.txt")
 
     results_map =
       Enum.reduce(split_parts, %{stopped_at_zero: 0, dial_position: dial_start}, fn list_item,
@@ -82,7 +82,7 @@ defmodule AOC.Day01 do
     min_dial = 0
     max_dial = 99
 
-    split_parts = parse_input("input.txt")
+    split_parts = parse_input("lib/day01/input.txt")
 
     results_map =
       split_parts
@@ -139,6 +139,3 @@ defmodule AOC.Day01 do
     passed_zero
   end
 end
-
-AOC.Day01.part1()
-AOC.Day01.part2()
