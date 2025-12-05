@@ -84,16 +84,15 @@ defmodule AOC.Day01 do
 
     split_parts = parse_input("lib/day01/input.txt")
 
-    results_map =
+    {passed_zero, _} =
       split_parts
-      |> Enum.reduce(%{passed_zero: 0, dial_position: dial_start}, fn list_item, acc ->
+      |> Enum.reduce({0, dial_start}, fn list_item, {passed_zero, dial_position} ->
         {direction, rotation} = parse_instruction(list_item)
-        dial_position = Map.get(acc, :dial_position)
 
         remainder_rotation = rem(rotation, max_dial + 1)
         extra_full_rotations = div(rotation, max_dial + 1)
 
-        dial_position =
+        new_dial_position =
           case direction do
             # Left is minus
             "L" ->
@@ -105,35 +104,42 @@ defmodule AOC.Day01 do
           end
 
         extra_rotations =
-          if dial_position > max_dial || dial_position < min_dial || dial_position == 0 do
+          if new_dial_position > max_dial || new_dial_position < min_dial ||
+               new_dial_position == 0 do
             1
           else
             0
           end
 
-        dial_position =
+        new_dial_position =
           cond do
-            dial_position > max_dial ->
-              dial_position - max_dial - 1
+            new_dial_position > max_dial ->
+              new_dial_position - max_dial - 1
 
-            dial_position < min_dial ->
-              dial_position + max_dial + 1
+            new_dial_position < min_dial ->
+              new_dial_position + max_dial + 1
 
             true ->
-              dial_position
+              new_dial_position
           end
 
-        IO.puts("Directions #{list_item} current rotation #{Map.get(acc, :dial_position)}")
-        IO.puts("Full rotations #{extra_full_rotations}, extra rotations #{extra_rotations}")
+        File.write!(
+          File.cwd!() |> Path.join("lib/day01/debug_log.txt"),
+          """
+          Directions #{list_item} current rotation #{dial_position}
+          New dial pos #{new_dial_position}
+          Full rotations #{extra_full_rotations}, extra rotations #{extra_rotations}
+          Rotation total before #{passed_zero}
+          Rotation total after #{passed_zero + extra_full_rotations + extra_rotations}
+          """,
+          [:append]
+        )
 
-        %{
-          acc
-          | dial_position: dial_position,
-            passed_zero: Map.get(acc, :passed_zero) + extra_full_rotations + extra_rotations
+        {
+          passed_zero + extra_full_rotations + extra_rotations,
+          new_dial_position
         }
       end)
-
-    passed_zero = Map.get(results_map, :passed_zero, 0)
 
     IO.puts("Results: #{passed_zero}")
     passed_zero
