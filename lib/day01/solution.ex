@@ -123,16 +123,16 @@ defmodule AOC.Day01 do
               new_dial_position
           end
 
-        File.write!(
-          File.cwd!() |> Path.join("lib/day01/debug_log.txt"),
-          """
-          Directions #{list_item} current rotation #{dial_position}
-          New dial pos #{new_dial_position}
-          Full rotations #{extra_full_rotations}, extra rotations #{extra_rotations}
-          Rotation total before #{passed_zero}, after #{passed_zero + extra_full_rotations + extra_rotations}
-          """,
-          [:append]
-        )
+        # File.write!(
+        #   File.cwd!() |> Path.join("lib/day01/debug_log.txt"),
+        #   """
+        #   Directions #{list_item} current rotation #{dial_position}
+        #   New dial pos #{new_dial_position}
+        #   Full rotations #{extra_full_rotations}, extra rotations #{extra_rotations}
+        #   Rotation total before #{passed_zero}, after #{passed_zero + extra_full_rotations + extra_rotations}
+        #   """,
+        #   [:append]
+        # )
 
         {
           passed_zero + extra_full_rotations + extra_rotations,
